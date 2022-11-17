@@ -25,12 +25,13 @@ constructor() {
         loading: true,
         tag: "story",
         sort: "Popularity",
-        timeRange: "All Time"
+        timeRange: "All Time",
+        time: 0
     };
 }
 
     async componentDidMount(){
-        const res = await axios.get(`https://hn.algolia.com/api/v1/search?query=&tags=${this.state.tag}&page=${this.state.currPage-1}&hitsPerPage=30`);
+        const res = await axios.get(`https://hn.algolia.com/api/v1/search?query=&tags=${this.state.tag}&numericFilters=created_at_i>${this.state.time}&page=${this.state.currPage-1}&hitsPerPage=30`);
         let data = res.data;
         this.setState({
             news: [...data.hits],
@@ -40,12 +41,22 @@ constructor() {
     }
 
     changeNews = async () => {
-        const res = await axios.get(`https://hn.algolia.com/api/v1/search?query=&tags=${this.state.tag}&page=${this.state.currPage-1}&hitsPerPage=30`);
-        let data = res.data;
-        this.setState({
-            news: [...data.hits],
-            loading: false
-        })
+        if(this.state.sort === "Popularity"){
+            const res = await axios.get(`https://hn.algolia.com/api/v1/search?query=&tags=${this.state.tag}&numericFilters=created_at_i>${this.state.time}&page=${this.state.currPage-1}&hitsPerPage=30`);
+            let data = res.data;
+            this.setState({
+                news: [...data.hits],
+                loading: false
+            })
+        }
+        else{
+            const res = await axios.get(`https://hn.algolia.com/api/v1/search_by_date?query=&tags=${this.state.tag}&numericFilters=created_at_i>${this.state.time}&page=${this.state.currPage-1}&hitsPerPage=30`);
+            let data = res.data;
+            this.setState({
+                news: [...data.hits],
+                loading: false
+            })
+        }
     }
 
     handleRight = () => {
@@ -100,14 +111,49 @@ constructor() {
 
     handleSortFilter = (event) => {
         this.setState({
-            sort: event.target.value
-        })
+            sort: event.target.value,
+            loading: true,
+            currPage: 1,
+            parr:[1],
+        },this.changeNews)
     }
 
     handleTimeRange = (event) =>{
+        let d = new Date();
+        const seconds = Math.floor(d.getTime() / 1000);
+
         this.setState({
-            timeRange: event.target.value
+            timeRange: event.target.value,
+            loading: true,
+            currPage: 1,
+            parr:[1],
         })
+
+        if(event.target.value === "All Time"){
+            this.setState({
+                time: 0
+            },this.changeNews)
+        }
+        else if(event.target.value === "Last 24H"){
+            this.setState({
+                time: (seconds - (24*60*60))
+            },this.changeNews)
+        }
+        else if(event.target.value === "Past Week"){
+            this.setState({
+                time: (seconds - (7*24*60*60))
+            },this.changeNews)
+        }
+        else if(event.target.value === "Past Month"){
+            this.setState({
+                time: (seconds - (30*24*60*60))
+            },this.changeNews)
+        }
+        else if(event.target.value === "Past Year"){
+            this.setState({
+                time: (seconds - (365*24*60*60))
+            },this.changeNews)
+        }
     }
 
     render() {
@@ -158,6 +204,9 @@ constructor() {
                             >
                                 <MenuItem value={"All Time"}>All Time</MenuItem>
                                 <MenuItem value={"Last 24H"}>Last 24H</MenuItem>
+                                <MenuItem value={"Past Week"}>Past Week</MenuItem>
+                                <MenuItem value={"Past Month"}>Past Month</MenuItem>
+                                <MenuItem value={"Past Year"}>Past Year</MenuItem>
                             </Select>
                         </FormControl>
                     </div>
