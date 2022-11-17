@@ -42,3 +42,22 @@
   margin-left: 8vw;
   border: 1px solid black;
 }
+
+.search-page-header{
+  display: flex;
+  padding: 5px;
+  background-color: orange;
+}
+.search-icon{
+  padding: 5px;
+  margin-top: 8px;
+  margin-right: 8px;
+  font-size: 30px;
+}
+
+.search-heading{
+  padding: 2px;
+  margin-right: 8px;
+  font-size: 20px;
+  line-height: 1;
+}

@@ -9,22 +9,25 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import { Link } from '@mui/material';
+import ReactTimeAgo from 'react-time-ago';
 
 class Home extends Component {
     constructor() {
-        
+
         super();
     
         this.state = {
             news: null,
             currPage: 1,
             parr:[1],
-            loading: true
+            loading: true,
+            value: 1,
+            tags: "(story,show_hn,ask_hn)"
         };
     }
     
     async componentDidMount(){
-        const res = await axios.get(`http://hn.algolia.com/api/v1/search_by_date?tags=(story,show_hn,ask_hn)&page=${this.state.currPage-1}&hitsPerPage=30`);
+        const res = await axios.get(`http://hn.algolia.com/api/v1/search_by_date?tags=${this.state.tags}&page=${this.state.currPage-1}&hitsPerPage=30`);
         let data = res.data;
         this.setState({
             news: [...data.hits],
@@ -34,7 +37,7 @@ class Home extends Component {
     }
 
     changeNews = async () => {
-        const res = await axios.get(`http://hn.algolia.com/api/v1/search_by_date?tags=(story,show_hn,ask_hn)&page=${this.state.currPage-1}&hitsPerPage=30`);
+        const res = await axios.get(`http://hn.algolia.com/api/v1/search_by_date?tags=${this.state.tags}&page=${this.state.currPage-1}&hitsPerPage=30`);
         let data = res.data;
         this.setState({
             news: [...data.hits],
@@ -79,16 +82,51 @@ class Home extends Component {
         }
     }
 
+    handleTabChange = (num) =>{
+        if(num === this.state.value) return;
+        this.setState({
+            value: num,
+            currPage: 1,
+            parr:[1],
+        });
+        if(num === 1){
+            this.setState({
+                tags: "(story,show_hn,ask_hn)",
+                loading: true
+            },this.changeNews)
+        }
+        else if(num === 4){
+            this.setState({
+                tags: "ask_hn",
+                loading: true
+            },this.changeNews)
+        }
+        else if(num === 5){
+            this.setState({
+                tags: "show_hn",
+                loading: true
+            },this.changeNews)
+        }
+        else if(num === 6){
+            this.setState({
+                tags: "job",
+                loading: true
+            },this.changeNews)
+        }
+    }
+
     render() {
-        let value = 1;
         return(
             <div className="home-container">
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                    <Tabs value={value} aria-label="basic tabs example">
-                        <Tab label = "Hacker News"/>
-                        <Tab label="New" />
-                        <Tab label="Past" />
-                        <Tab label="Comments" />
+                    <Tabs value={this.state.value} aria-label="basic tabs example">
+                        <Tab sx={{color: 'black', fontWeight: 600}} label = "Hacker News"/>
+                        <Tab onClick={()=>this.handleTabChange(1)} label="New" />
+                        <Tab onClick={()=>this.handleTabChange(2)} label="Past" />
+                        <Tab onClick={()=>this.handleTabChange(3)} label="Comments" />
+                        <Tab onClick={()=>this.handleTabChange(4)} label="Ask" />
+                        <Tab onClick={()=>this.handleTabChange(5)} label="Show" />
+                        <Tab onClick={()=>this.handleTabChange(6)} label="Jobs" />
                     </Tabs>
                 </Box>
             {
@@ -108,7 +146,10 @@ class Home extends Component {
                                     <ListItemText primary={
                                         <Link sx={{lineHeight: 'auto'}} underline="none" href={element.url} style={{cursor:'pointer', color: 'black'}}>{element.title}</Link>} 
                                         secondary={
-                                        <>{element.points} points by <Link style={{cursor:'pointer'}} underline='hover'>{element.author}</Link></>
+                                        <>{element.points} points by <Link style={{cursor:'pointer'}} underline='hover'>{element.author}</Link>
+                                        &nbsp;|&nbsp; 
+                                        <Link style={{cursor:'pointer', color: 'grey'}} underline='hover'><ReactTimeAgo date={Date.parse(element.created_at)} locale="en-US"/></Link>
+                                        </>
                                     } />
                                 </ListItem>
                             )
