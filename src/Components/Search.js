@@ -1,5 +1,4 @@
 import React,{Component} from 'react';
-import TextField from '@mui/material/TextField';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
@@ -13,6 +12,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import OutlinedInput from '@mui/material/OutlinedInput';
 
 class Search extends Component {
 constructor() {
@@ -26,7 +26,8 @@ constructor() {
         tag: "story",
         sort: "Popularity",
         timeRange: "All Time",
-        time: 0
+        time: 0,
+        query: ""
     };
 }
 
@@ -42,7 +43,7 @@ constructor() {
 
     changeNews = async () => {
         if(this.state.sort === "Popularity"){
-            const res = await axios.get(`https://hn.algolia.com/api/v1/search?query=&tags=${this.state.tag}&numericFilters=created_at_i>${this.state.time}&page=${this.state.currPage-1}&hitsPerPage=30`);
+            const res = await axios.get(`https://hn.algolia.com/api/v1/search?query=${this.state.query}&tags=${this.state.tag}&numericFilters=created_at_i>${this.state.time}&page=${this.state.currPage-1}&hitsPerPage=30`);
             let data = res.data;
             this.setState({
                 news: [...data.hits],
@@ -50,7 +51,7 @@ constructor() {
             })
         }
         else{
-            const res = await axios.get(`https://hn.algolia.com/api/v1/search_by_date?query=&tags=${this.state.tag}&numericFilters=created_at_i>${this.state.time}&page=${this.state.currPage-1}&hitsPerPage=30`);
+            const res = await axios.get(`https://hn.algolia.com/api/v1/search_by_date?query=${this.state.query}&tags=${this.state.tag}&numericFilters=created_at_i>${this.state.time}&page=${this.state.currPage-1}&hitsPerPage=30`);
             let data = res.data;
             this.setState({
                 news: [...data.hits],
@@ -156,6 +157,12 @@ constructor() {
         }
     }
 
+    handleSearchQuery = (event) =>{
+        this.setState({
+            query: event.target.value
+        },this.changeNews)
+    }
+
     render() {
         return(
             <div style={{backgroundColor: 'black',minWidth: '100vw',minHeight: '100vh'}}>
@@ -163,7 +170,7 @@ constructor() {
                     <div className="search-page-header">
                         <div className="search-heading">Search <br/> Hacker News</div>
                         <FontAwesomeIcon className="search-icon" icon={faMagnifyingGlass}/>
-                        <TextField id="input-with-sx" label="Search Stories by Title, URL or Author" variant="outlined" style={{width: '80%'}} />
+                        <OutlinedInput placeholder="Search Stories by Title, URL or Author" value={this.state.query} onChange={(e)=>this.handleSearchQuery(e)} style={{width: '80%',backgroundColor:'white',fontSize: 'large'}} />
                     </div>
                     <div className="filter-bar">
                         <p style={{marginLeft: '0.7%'}}>Search</p>
