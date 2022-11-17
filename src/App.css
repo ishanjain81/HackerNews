@@ -61,3 +61,13 @@
   font-size: 20px;
   line-height: 1;
 }
+
+.filter-bar{
+  border: 1px solid brown;
+  display: flex;
+}
+
+.filter-bar p{
+  font-size: medium;
+  margin-top: 15px;
+}
