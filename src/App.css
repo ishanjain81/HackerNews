@@ -75,3 +75,22 @@
 .list-icon{
   font-size: 5px;
 }
+
+.Home-Search{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Home-Search-Bar{
+  font-size: 'medium';
+  margin: 5px;
+  height: 40px;
+}
+
+.home-search-icon{
+  font-size: 28px;
+  margin: 2px;
+  padding: 1px;
+  margin-top: 4px;
+}

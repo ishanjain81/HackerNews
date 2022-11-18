@@ -14,6 +14,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import {Link as Linkto} from 'react-router-dom';
 import ReactHtmlParser from 'react-html-parser';
+import OutlinedInput from '@mui/material/OutlinedInput';
 
 class Home extends Component {
     constructor() {
@@ -26,7 +27,8 @@ class Home extends Component {
             parr:[1],
             loading: true,
             value: 1,
-            tags: "(story,show_hn,ask_hn)"
+            tags: "(story,show_hn,ask_hn)",
+            query: ""
         };
     }
     
@@ -37,7 +39,6 @@ class Home extends Component {
             news: [...data.hits],
             loading: false
         })
-        console.log(data.hits[0]);
     }
 
     changeNews = async () => {
@@ -125,6 +126,12 @@ class Home extends Component {
         }
     }
 
+    handleSearchQuery = (event) =>{
+        this.setState({
+            query: event.target.value,
+        })
+    }
+
     render() {
         return(
             <div className="home-container">
@@ -137,7 +144,10 @@ class Home extends Component {
                         <Tab onClick={()=>this.handleTabChange(4)} label="Show" />
                         <Tab onClick={()=>this.handleTabChange(5)} label="Jobs" />
                     </Tabs>
-                    <Linkto style={{cursor:'pointer'}} to="/search"><FontAwesomeIcon className="search-icon" icon={faMagnifyingGlass}/></Linkto>
+                    <div className="Home-Search">
+                        <OutlinedInput className="Home-Search-Bar" placeholder="Search" value={this.state.query} onChange={(e)=>this.handleSearchQuery(e)} />
+                        <Linkto style={{cursor:'pointer'}} to={`/search?query=${this.state.query}`}><FontAwesomeIcon className="home-search-icon" icon={faMagnifyingGlass}/></Linkto>
+                    </div>
                 </Box>
             {
                 this.state.loading === true ? 

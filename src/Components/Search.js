@@ -34,12 +34,14 @@ constructor() {
 }
 
     async componentDidMount(){
-        const res = await axios.get(`https://hn.algolia.com/api/v1/search?query=&tags=${this.state.tag}&numericFilters=created_at_i>${this.state.time}&page=${this.state.currPage-1}&hitsPerPage=30`);
-        let data = res.data;
+        const urlParams = new URLSearchParams(window.location.search);
+        let value = urlParams.get('query');
+        if(value === null){
+            value = "";
+        }
         this.setState({
-            news: [...data.hits],
-            loading: false
-        })
+            query: value
+        },this.changeNews)
     }
 
     changeNews = async () => {
@@ -50,7 +52,7 @@ constructor() {
                 news: [...data.hits],
                 loading: false
             })
-            console.log(data.hits)
+            // console.log(data.hits)
         }
         else{
             const res = await axios.get(`https://hn.algolia.com/api/v1/search_by_date?query=${this.state.query}&tags=${this.state.tag}&numericFilters=created_at_i>${this.state.time}&page=${this.state.currPage-1}&hitsPerPage=30`);
@@ -59,7 +61,7 @@ constructor() {
                 news: [...data.hits],
                 loading: false
             })
-            console.log(data.hits)
+            // console.log(data.hits)
         }
     }
 
