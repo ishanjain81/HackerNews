@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlass, faCircle } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import CircularProgress from '@mui/material/CircularProgress';
 import List from '@mui/material/List';
@@ -13,6 +13,8 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import OutlinedInput from '@mui/material/OutlinedInput';
+import ReactHtmlParser from 'react-html-parser';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
 
 class Search extends Component {
 constructor() {
@@ -38,7 +40,6 @@ constructor() {
             news: [...data.hits],
             loading: false
         })
-        console.log(data.hits[0]);
     }
 
     changeNews = async () => {
@@ -49,6 +50,7 @@ constructor() {
                 news: [...data.hits],
                 loading: false
             })
+            console.log(data.hits)
         }
         else{
             const res = await axios.get(`https://hn.algolia.com/api/v1/search_by_date?query=${this.state.query}&tags=${this.state.tag}&numericFilters=created_at_i>${this.state.time}&page=${this.state.currPage-1}&hitsPerPage=30`);
@@ -57,6 +59,7 @@ constructor() {
                 news: [...data.hits],
                 loading: false
             })
+            console.log(data.hits)
         }
     }
 
@@ -159,7 +162,10 @@ constructor() {
 
     handleSearchQuery = (event) =>{
         this.setState({
-            query: event.target.value
+            query: event.target.value,
+            loading: true,
+            currPage: 1,
+            parr:[1],
         },this.changeNews)
     }
 
@@ -170,7 +176,7 @@ constructor() {
                     <div className="search-page-header">
                         <div className="search-heading">Search <br/> Hacker News</div>
                         <FontAwesomeIcon className="search-icon" icon={faMagnifyingGlass}/>
-                        <OutlinedInput placeholder="Search Stories by Title, URL or Author" value={this.state.query} onChange={(e)=>this.handleSearchQuery(e)} style={{width: '80%',backgroundColor:'white',fontSize: 'large'}} />
+                        <OutlinedInput placeholder="Search Stories by Title, URL or Author" value={this.state.query} onChange={(e)=>this.handleSearchQuery(e)} style={{width: '80%',backgroundColor:'white',fontSize: 'medium'}} />
                     </div>
                     <div className="filter-bar">
                         <p style={{marginLeft: '0.7%'}}>Search</p>
@@ -225,14 +231,33 @@ constructor() {
                                 this.state.news.map((element,index)=>{
                                     return(
                                         <ListItem key={element.objectID} sx={{paddingTop: 0, paddingBottom: 0}}>
-                                            <ListItemText primary={
-                                                <Link sx={{lineHeight: 'auto'}} underline="none" href={element.url} style={{cursor:'pointer', color: 'black'}}>{element.title}</Link>} 
-                                                secondary={
-                                                <>{element.points} points by <Link style={{cursor:'pointer'}} underline='hover'>{element.author}</Link>
-                                                &nbsp;|&nbsp; 
-                                                <Link style={{cursor:'pointer', color: 'grey'}} underline='hover'><ReactTimeAgo date={Date.parse(element.created_at)} locale="en-US"/></Link>
-                                                </>
-                                            } />
+                                            <ListItemAvatar sx={{minWidth: 20, padding: 0, paddingRight: 1}}>
+                                                <FontAwesomeIcon className="list-icon" icon={faCircle}/>
+                                            </ListItemAvatar>
+                                            {
+                                                element.title === null  || element.title === "" ? 
+                                                <ListItemText secondary={
+                                                    <Link sx={{lineHeight: 'auto'}} underline="none" href={element.url} style={{cursor:'pointer', color: 'black'}}><div>{ReactHtmlParser(element.comment_text)}</div></Link>} 
+                                                    primary={
+                                                    <>
+                                                    <div style={{fontSize: '12px'}}>
+                                                        {element.points === null ? 0 : element.points} points | <Link style={{cursor:'pointer'}} underline='hover'>{element.author}</Link>
+                                                        &nbsp;|&nbsp; 
+                                                        <Link style={{cursor:'pointer', color: 'grey'}} underline='hover'><ReactTimeAgo date={Date.parse(element.created_at)} locale="en-US"/></Link>
+                                                        &nbsp;| on: <Link style={{cursor:'pointer', color: 'grey'}} underline='hover'>{element.story_title}</Link>
+                                                    </div>
+                                                    </>
+                                                }/>
+                                                :
+                                                <ListItemText primary={
+                                                    <Link sx={{lineHeight: 'auto'}} underline="none" href={element.url} style={{cursor:'pointer', color: 'black'}}>{element.title}</Link>} 
+                                                    secondary={
+                                                    <>{element.points === null ? 0 : element.points} points by <Link style={{cursor:'pointer'}} underline='hover'>{element.author}</Link>
+                                                    &nbsp;|&nbsp; 
+                                                    <Link style={{cursor:'pointer', color: 'grey'}} underline='hover'><ReactTimeAgo date={Date.parse(element.created_at)} locale="en-US"/></Link>
+                                                    </>
+                                                } />
+                                            }
                                         </ListItem>
                                     )
                                 })

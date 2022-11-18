@@ -10,6 +10,10 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import { Link } from '@mui/material';
 import ReactTimeAgo from 'react-time-ago';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import {Link as Linkto} from 'react-router-dom';
+import ReactHtmlParser from 'react-html-parser';
 
 class Home extends Component {
     constructor() {
@@ -95,19 +99,25 @@ class Home extends Component {
                 loading: true
             },this.changeNews)
         }
-        else if(num === 4){
+        else if(num === 2){
+            this.setState({
+                tags: "comment",
+                loading: true
+            },this.changeNews)
+        }
+        else if(num === 3){
             this.setState({
                 tags: "ask_hn",
                 loading: true
             },this.changeNews)
         }
-        else if(num === 5){
+        else if(num === 4){
             this.setState({
                 tags: "show_hn",
                 loading: true
             },this.changeNews)
         }
-        else if(num === 6){
+        else if(num === 5){
             this.setState({
                 tags: "job",
                 loading: true
@@ -118,16 +128,16 @@ class Home extends Component {
     render() {
         return(
             <div className="home-container">
-                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex', justifyContent: 'space-between' }}>
                     <Tabs value={this.state.value} aria-label="basic tabs example">
                         <Tab sx={{color: 'black', fontWeight: 600}} label = "Hacker News"/>
                         <Tab onClick={()=>this.handleTabChange(1)} label="New" />
-                        <Tab onClick={()=>this.handleTabChange(2)} label="Past" />
-                        <Tab onClick={()=>this.handleTabChange(3)} label="Comments" />
-                        <Tab onClick={()=>this.handleTabChange(4)} label="Ask" />
-                        <Tab onClick={()=>this.handleTabChange(5)} label="Show" />
-                        <Tab onClick={()=>this.handleTabChange(6)} label="Jobs" />
+                        <Tab onClick={()=>this.handleTabChange(2)} label="Comments" />
+                        <Tab onClick={()=>this.handleTabChange(3)} label="Ask" />
+                        <Tab onClick={()=>this.handleTabChange(4)} label="Show" />
+                        <Tab onClick={()=>this.handleTabChange(5)} label="Jobs" />
                     </Tabs>
+                    <Linkto style={{cursor:'pointer'}} to="/search"><FontAwesomeIcon className="search-icon" icon={faMagnifyingGlass}/></Linkto>
                 </Box>
             {
                 this.state.loading === true ? 
@@ -143,14 +153,30 @@ class Home extends Component {
                                         }
                                         .
                                     </ListItemAvatar>
-                                    <ListItemText primary={
-                                        <Link sx={{lineHeight: 'auto'}} underline="none" href={element.url} style={{cursor:'pointer', color: 'black'}}>{element.title}</Link>} 
-                                        secondary={
-                                        <>{element.points} points by <Link style={{cursor:'pointer'}} underline='hover'>{element.author}</Link>
-                                        &nbsp;|&nbsp; 
-                                        <Link style={{cursor:'pointer', color: 'grey'}} underline='hover'><ReactTimeAgo date={Date.parse(element.created_at)} locale="en-US"/></Link>
-                                        </>
-                                    } />
+                                    {
+                                        element.title === null  || element.title === "" ? 
+                                        <ListItemText secondary={
+                                            <Link sx={{lineHeight: 'auto'}} underline="none" href={element.url} style={{cursor:'pointer', color: 'black'}}><div>{ReactHtmlParser(element.comment_text)}</div></Link>} 
+                                            primary={
+                                            <>
+                                            <div style={{fontSize: '12px'}}>
+                                                {element.points === null ? 0 : element.points} points | <Link style={{cursor:'pointer'}} underline='hover'>{element.author}</Link>
+                                                &nbsp;|&nbsp; 
+                                                <Link style={{cursor:'pointer', color: 'grey'}} underline='hover'><ReactTimeAgo date={Date.parse(element.created_at)} locale="en-US"/></Link>
+                                                &nbsp;| on: <Link style={{cursor:'pointer', color: 'grey'}} underline='hover'>{element.story_title}</Link>
+                                            </div>
+                                            </>
+                                        }/>
+                                        :
+                                        <ListItemText primary={
+                                            <Link sx={{lineHeight: 'auto'}} underline="none" href={element.url} style={{cursor:'pointer', color: 'black'}}>{element.title}</Link>} 
+                                            secondary={
+                                            <>{element.points === null ? 0 : element.points} points by <Link style={{cursor:'pointer'}} underline='hover'>{element.author}</Link>
+                                            &nbsp;|&nbsp; 
+                                            <Link style={{cursor:'pointer', color: 'grey'}} underline='hover'><ReactTimeAgo date={Date.parse(element.created_at)} locale="en-US"/></Link>
+                                            </>
+                                        } />
+                                    }
                                 </ListItem>
                             )
                         })
