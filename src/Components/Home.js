@@ -133,16 +133,22 @@ class Home extends Component {
     }
 
     render() {
+        let tabs = ["New", "Comments", "Ask", "Show", "Jobs"];
         return(
             <div className="home-container">
-                <Box sx={{ borderBottom: 1, borderColor: 'black', display: 'flex', alignItems: 'center',justifyContent: 'space-between' }}>
-                    <Tabs value={this.state.value} aria-label="basic tabs example" textColor="primary">
-                        <Tab sx={{color: 'black', fontWeight: 600}} label = "Hacker News"/>
-                        <Tab sx={{color: 'black'}}  onClick={()=>this.handleTabChange(1)} label="New"/>
-                        <Tab sx={{color: 'black'}}  onClick={()=>this.handleTabChange(2)} label="Comments" />
-                        <Tab sx={{color: 'black'}}  onClick={()=>this.handleTabChange(3)} label="Ask" />
-                        <Tab sx={{color: 'black'}}  onClick={()=>this.handleTabChange(4)} label="Show" />
-                        <Tab sx={{color: 'black'}}  onClick={()=>this.handleTabChange(5)} label="Jobs" />
+                <Box sx={{ borderBottom: 1, borderColor: 'black', display: 'flex', alignItems: 'center',justifyContent: 'space-between', backgroundColor: '#ff742b' }}>
+                    <Tabs value={this.state.value} aria-label="basic tabs example" indicatorColor="inherit" textColor='none'>
+                        <Tab sx={{color: 'black', fontWeight: 800}} label = "Hacker News"/>
+                        {
+                            tabs.map((element,index) => {
+                                return(
+                                    index+1 === this.state.value ? 
+                                    <Tab key={index} sx={{color: 'black', fontWeight: 600, border: 2, borderColor: 'black', borderRadius: '10px', backgroundColor: 'white'}}  onClick={()=>this.handleTabChange(index+1)} label={element}/>
+                                    :
+                                    <Tab key={index} sx={{color: 'black'}}  onClick={()=>this.handleTabChange(index+1)} label={element} />
+                                )
+                            })
+                        }
                     </Tabs>
                     <div className="Home-Search">
                         <OutlinedInput className="Home-Search-Bar" placeholder="Search" value={this.state.query} onChange={(e)=>this.handleSearchQuery(e)} />
@@ -152,7 +158,7 @@ class Home extends Component {
             {
                 this.state.loading === true ? 
                 <CircularProgress/>:
-                <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+                <List sx={{ width: '100%', bgcolor: '#f6f6ef' }}>
                     {
                         this.state.news.map((element,index)=>{
                             return(
@@ -193,7 +199,7 @@ class Home extends Component {
                     }
                 </List>
             }
-            <div style={{display:'flex',justifyContent:'center'}}>
+            <div style={{display:'flex',justifyContent:'center', borderTop: '2px solid black'}}>
                     <nav aria-label="Page navigation example">
                         <ul className="pagination">
                             <li className="page-item"><a className="page-link" onClick={this.handleLeft} style={{cursor:'pointer'}}>Previous</a></li>

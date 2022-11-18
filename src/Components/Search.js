@@ -229,7 +229,7 @@ constructor() {
                     {
                         this.state.loading === true ? 
                         <CircularProgress/>:
-                        <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+                        <List sx={{ width: '100%', bgcolor: '#f6f6ef' }}>
                             {
                                 this.state.news.map((element,index)=>{
                                     return(
@@ -267,7 +267,7 @@ constructor() {
                             }
                         </List>
                     }
-                    <div style={{display:'flex',justifyContent:'center'}}>
+                    <div style={{display:'flex',justifyContent:'center', borderTop: '1px solid black'}}>
                         <nav aria-label="Page navigation example">
                             <ul className="pagination">
                                 <li className="page-item"><a className="page-link" onClick={this.handleLeft} style={{cursor:'pointer'}}>Previous</a></li>
