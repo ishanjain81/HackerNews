@@ -11,7 +11,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import { Link } from '@mui/material';
 import ReactTimeAgo from 'react-time-ago';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlass, faHeading } from '@fortawesome/free-solid-svg-icons';
 import {Link as Linkto} from 'react-router-dom';
 import ReactHtmlParser from 'react-html-parser';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -135,14 +135,14 @@ class Home extends Component {
     render() {
         return(
             <div className="home-container">
-                <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex', justifyContent: 'space-between' }}>
-                    <Tabs value={this.state.value} aria-label="basic tabs example">
+                <Box sx={{ borderBottom: 1, borderColor: 'black', display: 'flex', alignItems: 'center',justifyContent: 'space-between' }}>
+                    <Tabs value={this.state.value} aria-label="basic tabs example" textColor="primary">
                         <Tab sx={{color: 'black', fontWeight: 600}} label = "Hacker News"/>
-                        <Tab onClick={()=>this.handleTabChange(1)} label="New" />
-                        <Tab onClick={()=>this.handleTabChange(2)} label="Comments" />
-                        <Tab onClick={()=>this.handleTabChange(3)} label="Ask" />
-                        <Tab onClick={()=>this.handleTabChange(4)} label="Show" />
-                        <Tab onClick={()=>this.handleTabChange(5)} label="Jobs" />
+                        <Tab sx={{color: 'black'}}  onClick={()=>this.handleTabChange(1)} label="New"/>
+                        <Tab sx={{color: 'black'}}  onClick={()=>this.handleTabChange(2)} label="Comments" />
+                        <Tab sx={{color: 'black'}}  onClick={()=>this.handleTabChange(3)} label="Ask" />
+                        <Tab sx={{color: 'black'}}  onClick={()=>this.handleTabChange(4)} label="Show" />
+                        <Tab sx={{color: 'black'}}  onClick={()=>this.handleTabChange(5)} label="Jobs" />
                     </Tabs>
                     <div className="Home-Search">
                         <OutlinedInput className="Home-Search-Bar" placeholder="Search" value={this.state.query} onChange={(e)=>this.handleSearchQuery(e)} />

@@ -47,10 +47,10 @@
   display: flex;
   padding: 5px;
   background-color: orange;
+  align-items: center;
 }
 .search-icon{
   padding: 5px;
-  margin-top: 8px;
   margin-right: 8px;
   font-size: 30px;
 }
@@ -60,6 +60,7 @@
   margin-right: 8px;
   font-size: 20px;
   line-height: 1;
+  font-weight: 500;
 }
 
 .filter-bar{
@@ -86,6 +87,7 @@
   font-size: 'medium';
   margin: 5px;
   height: 40px;
+  color: black;
 }
 
 .home-search-icon{
@@ -93,4 +95,38 @@
   margin: 2px;
   padding: 1px;
   margin-top: 4px;
+}
+
+.select-labels{
+  min-width: 120;
+}
+
+.head-icon{
+  padding: 5px;
+  margin-right: 8px;
+  font-size: 30px;
+  border: 3px solid black;
+}
+
+.home-head-icon{
+  padding: 5px;
+  margin-top: 6px;
+  margin-left: 2px;
+  font-size: 22px;
+  display: inline;
+  border: 3px solid black;
+}
+
+@media (max-width: 768px) {
+  .home-container{
+    width: 100vw;
+    margin-left: 0;
+    border: 0px solid black;
+  }
+  .display-none{
+    display: none;
+  }
+  .select-labels{
+    width: 30%;
+  }
 }

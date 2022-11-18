@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass, faCircle } from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlass, faCircle, faHeading } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import CircularProgress from '@mui/material/CircularProgress';
 import List from '@mui/material/List';
@@ -176,13 +176,14 @@ constructor() {
             <div style={{backgroundColor: 'black',minWidth: '100vw',minHeight: '100vh'}}>
                 <div className="home-container" style={{backgroundColor: 'white'}}>
                     <div className="search-page-header">
+                        <FontAwesomeIcon className="head-icon" icon={faHeading}/>
                         <div className="search-heading">Search <br/> Hacker News</div>
                         <FontAwesomeIcon className="search-icon" icon={faMagnifyingGlass}/>
                         <OutlinedInput placeholder="Search Stories by Title, URL or Author" value={this.state.query} onChange={(e)=>this.handleSearchQuery(e)} style={{width: '80%',backgroundColor:'white',fontSize: 'medium'}} />
                     </div>
                     <div className="filter-bar">
-                        <p style={{marginLeft: '0.7%'}}>Search</p>
-                        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                        <p className="display-none" style={{marginLeft: '0.7%'}}>Search</p>
+                        <FormControl className="select-labels" sx={{m: 1}} size="small">
                             <InputLabel id="demo-select-small"></InputLabel>
                             <Select
                                 labelId="demo-select-small"
@@ -195,7 +196,7 @@ constructor() {
                                 <MenuItem value={"comment"}>Comments</MenuItem>
                             </Select>
                         </FormControl>
-                        <p>by</p>
+                        <p className="display-none">by</p>
                         <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
                             <InputLabel id="demo-select-small"></InputLabel>
                             <Select
@@ -208,7 +209,7 @@ constructor() {
                                 <MenuItem value={"Date"}>Date</MenuItem>
                             </Select>
                         </FormControl>
-                        <p>for</p>
+                        <p className="display-none">for</p>
                         <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
                             <InputLabel id="demo-select-small"></InputLabel>
                             <Select
