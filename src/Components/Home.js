@@ -33,7 +33,7 @@ class Home extends Component {
     }
     
     async componentDidMount(){
-        const res = await axios.get(`http://hn.algolia.com/api/v1/search_by_date?tags=${this.state.tags}&page=${this.state.currPage-1}&hitsPerPage=30`);
+        const res = await axios.get(`https://hn.algolia.com/api/v1/search_by_date?tags=${this.state.tags}&page=${this.state.currPage-1}&hitsPerPage=30`);
         let data = res.data;
         this.setState({
             news: [...data.hits],
@@ -42,7 +42,7 @@ class Home extends Component {
     }
 
     changeNews = async () => {
-        const res = await axios.get(`http://hn.algolia.com/api/v1/search_by_date?tags=${this.state.tags}&page=${this.state.currPage-1}&hitsPerPage=30`);
+        const res = await axios.get(`https://hn.algolia.com/api/v1/search_by_date?tags=${this.state.tags}&page=${this.state.currPage-1}&hitsPerPage=30`);
         let data = res.data;
         this.setState({
             news: [...data.hits],
